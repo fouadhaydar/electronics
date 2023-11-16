@@ -1,0 +1,133 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+a {
+  text-decoration: none;
+}
+
+/*Scroll bar nav*/
+body {
+  padding: 0 !important;
+  overflow-y: scroll !important;
+}
+.hero {
+  background-color: black;
+  background-image: url("./images/HeroImage.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+.overlay::after {
+  position: absolute;
+  content: "";
+  background-color: black;
+  opacity: 60%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+ul {
+  list-style-type: circle;
+}
+
+.flex-between {
+  @apply flex xsm:flex-col sm:flex-row sm:justify-between sm:items-center xsm:items-start xsm:gap-6;
+}
+
+.container {
+  @apply max-w-5xl w-full mx-auto px-4;
+}
+.primary_text {
+  @apply text-white xsm:text-3xl md:text-4xl lg:text-6xl font-bold;
+}
+.primary_text_2 {
+  @apply text-blue-400 xsm:text-3xl md:text-4xl lg:text-6xl font-bold;
+}
+.secondary_text {
+  @apply text-black xsm:text-xl md:text-2xl lg:text-4xl font-bold;
+}
+nav,
+footer {
+  @apply w-full bg-black opacity-100 backdrop-blur-md;
+}
+
+.icon_style_container {
+  @apply flex flex-col items-center justify-center gap-3 p-2 xsm:text-[12px] md:text-[16px];
+}
+.icon_style {
+  @apply lg:text-6xl xsm:text-3xl  hover:scale-110 hover:text-blue-500 transition duration-100 ease-out hover:ease-in cursor-pointer;
+  color: white;
+}
+.nav_icon_link {
+  @apply hover:text-blue-500 transition duration-150 ease-in-out hover:scale-110;
+}
+.line {
+  @apply bg-white w-full h-[1px] xsm:block sm:hidden;
+}
+
+.drop_shadow {
+  box-shadow:
+    0px 0px 27px -42px rgba(0, 0, 0, 0.1),
+    0px 0px 17px 0px rgba(0, 0, 0, 0.1);
+}
+
+.card {
+  @apply md:w-[300px] md:h-[350px] xsm:w-[200px] xsm:h-[300px] flex flex-col justify-center gap-2 p-3 relative  rounded-[5px] hover:scale-110 transition duration-100 ease-in-out cursor-pointer 
+  drop_shadow;
+}
+.card_plus {
+  @apply h-[300px] flex flex-col justify-center gap-2 p-3 relative  rounded-[5px] hover:scale-110 transition duration-100 ease-in-out cursor-pointer shadow-lg drop_shadow;
+}
+
+.btn_hover {
+  @apply hover:scale-105 hover:bg-blue-400 hover:text-white transition duration-100 ease-in-out;
+}
+.gradient {
+  position: relative;
+}
+.gradient::after {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  content: "";
+  background: linear-gradient(to bottom, transparent 0%, white 100%);
+  z-index: 10;
+}
+
+.section_title {
+  @apply text-center md:text-xl xsm:text-[16px];
+}
+
+.gradient_blue {
+  background: linear-gradient(325deg, #007aff 0%, #0f70da 100%);
+}
+
+.form_postion {
+  @apply flex flex-col mx-auto justify-center xl:w-3/4 md:w-[100%] xsm:w-3/4 gap-10 h-full;
+}
+
+.submit_btn {
+  @apply gradient_blue text-white p-[10px] w-[120px] rounded-[5px] xsm:w-full md:w-fit md:min-w-[100px];
+}
+
+.parent_sign_up_text_filed {
+  @apply flex xsm:flex-col md:flex-row gap-5 w-full;
+}
+
+.sign_up_text_filed {
+  @apply md:w-1/2 xsm:w-full;
+}
+.grid_card {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px;
+}
