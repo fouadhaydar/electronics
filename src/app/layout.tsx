@@ -3,7 +3,7 @@ import Nav from "@/components/navBar/Nav";
 import "../globals.css";
 import Footer from "@/components/footer/Footer";
 import RootProvider from "@/redux/Provider";
-// import { productsJSON } from '../../public/data'
+import Main from "./Main";
 
 export const metadata: Metadata = {
   title: "Electronics",
@@ -19,7 +19,10 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <main>
-          <RootProvider>{children}</RootProvider>
+          <RootProvider>
+            {children}
+            <Main />
+          </RootProvider>
         </main>
         <Footer />
       </body>

@@ -1,9 +1,15 @@
 "use client";
-import { Drawer } from "@mui/material";
-import { ArrowRightShort, XCircle } from "react-bootstrap-icons";
-import Link from "next/link";
+import { Alert, AlertTitle, Drawer } from "@mui/material";
+import { ArrowRightShort } from "react-bootstrap-icons";
 import CardInCart from "./CardInCart";
 import { useSelectore } from "@/redux/store";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { clearCart } from "@/redux/features/product-slice";
+import useAxiosInterceptors from "@/app/(auth)/hooks/useAxiosInterceptors";
+import { setUserCredentials } from "@/redux/features/auth/userSlice";
+import useSetToken from "@/hooks/useSetToken";
 
 const Cart = ({
   isOpen,
@@ -12,12 +18,35 @@ const Cart = ({
   isOpen: boolean;
   handlOpening: () => void;
 }) => {
+  const router = useRouter();
+  const token = useSelectore((state) => state.user.token);
+
   const cartProducts = useSelectore(
     (state) => state.CartSliceSliceReducer.cart
   );
   const totalPrice = useSelectore(
     (state) => state.CartSliceSliceReducer.totalePrice
   );
+
+  const dispatch = useDispatch();
+
+  const [text, setText] = useState(false);
+
+  const handleClick = () => {
+    if (cartProducts.length == 0) {
+      setText(true);
+    } else {
+      if (token) {
+        router.push("/checkout");
+      } else {
+        router.push("/log-in");
+      }
+    }
+  };
+
+  const clear = () => {
+    dispatch(clearCart());
+  };
 
   return (
     <>
@@ -33,7 +62,10 @@ const Cart = ({
               paddingX: "20px",
             },
           }}
-          onClose={() => handlOpening()}
+          onClose={() => {
+            setText(false);
+            handlOpening();
+          }}
         >
           <div className="flex justify-between my-8">
             <h2 className="mx-4 text-xl"> Shopping Cart </h2>
@@ -64,12 +96,26 @@ const Cart = ({
             <span className="font-bold">Totle price </span>
             <span>{totalPrice} $</span>
           </div>
-          <Link
-            className="w-full text-center gradient_blue mb-5 text-white py-3 rounded-md"
-            href={"/checkout"}
-          >
-            Checkout
-          </Link>
+          <div className="flex justify-center gap-1">
+            <button
+              className="w-full text-center bg-red-500 mb-5 text-white py-3 rounded-md"
+              onClick={clear}
+            >
+              Clear Cart
+            </button>
+            <button
+              className="w-full text-center gradient_blue mb-5 text-white py-3 rounded-md"
+              onClick={handleClick}
+            >
+              Checkout
+            </button>
+          </div>
+          {text && (
+            <Alert severity="warning" className="w-full">
+              <AlertTitle className="font-bold">Warning</AlertTitle>
+              you {"haven't"} anything to buy
+            </Alert>
+          )}
         </Drawer>
       </section>
     </>

@@ -2,11 +2,11 @@
 import { loadStripe } from "@stripe/stripe-js";
 import { FormEvent, useEffect, useState } from "react";
 import {
-  EmbeddedCheckoutProvider,
-  EmbeddedCheckout,
   AddressElement,
   useStripe,
   useElements,
+  CardElement,
+  ShippingAddressElementComponent,
 } from "@stripe/react-stripe-js";
 import { PaymentElement } from "@stripe/react-stripe-js";
 
@@ -31,7 +31,7 @@ export const PaymentForm = () => {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: "http://localhost:3000",
+        return_url: `${window.location.origin}/success`,
       },
     });
 
@@ -44,23 +44,16 @@ export const PaymentForm = () => {
     setIsLoading(false);
   };
   return (
-    // <div id="checkout">
-    //   {clientSecret && (
-    //     <EmbeddedCheckoutProvider
-    //       stripe={stripePromise}
-    //       options={{ clientSecret }}
-    //     >
-    //       <EmbeddedCheckout />
-    //     </EmbeddedCheckoutProvider>
-    //   )}
-    // </div>
     <form onSubmit={handleSubmit}>
-      <PaymentElement />
-      <AddressElement options={{ mode: "shipping" }} />
-      <button disabled={isLoading || !stripe || !elements}>
-        {isLoading ? "Loading..." : "Pay now"}
+      <PaymentElement id="payment-element" options={{ layout: "tabs" }} />
+      <AddressElement options={{ mode: "billing" }} />
+      <button
+        disabled={isLoading || !stripe || !elements}
+        className="text-center gradient_blue py-2 w-full my-4 text-white  rounded-md"
+      >
+        {isLoading ? "Submitting..." : "Pay"}
       </button>
-      {message && <div>{message}</div>}
+      {message && <p className="text-red-500">{message}</p>}
     </form>
   );
 };

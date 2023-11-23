@@ -58,7 +58,7 @@ type ProductInCart = {
   ramStorage: string;
 };
 
-interface PhoneCard {
+interface ProductCard {
   title: string;
   id: string;
   description: string;
@@ -92,4 +92,14 @@ interface PostReview {
   userId: string;
   productId: string;
   review: number;
+}
+
+interface shippingInfo {
+  firstName: string;
+  lastname: string;
+  country: string;
+  city: string;
+  zipCode: string;
+  streetAddress: string;
+  phoneNumber: string;
 }

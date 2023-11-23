@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Nav from "@/components/navBar/Nav";
-import Filter from "@/app/products/(components)/Filter";
+import Filter from "@/app/products/[category]/components/Filter";
 
 export const metadata: Metadata = {
   title: "Products",

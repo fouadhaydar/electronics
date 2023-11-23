@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import img from "../../../../public/assets/phones/Imgs.png";
 import { useState } from "react";

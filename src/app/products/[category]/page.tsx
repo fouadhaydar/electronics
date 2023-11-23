@@ -1,26 +1,23 @@
 "use client";
-import { getOneProduct, getProducts } from "@/app/fetchData";
 import Card from "@/components/Card";
+import useCustomeFetch from "@/hooks/useCustomeFetch";
 import { useSelectore } from "@/redux/store";
-import { PhoneCard } from "@/types";
+import { ProductCard } from "@/types";
+import { Alert, AlertTitle } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { BarLoader, HashLoader } from "react-spinners";
+import { CSSProperties } from "styled-components";
 
-const Phones = ({ params }: { params: { category: string } }) => {
-  const [phones, setPhones] = useState<PhoneCard[]>([]);
-  const [filterdPhones, setFilterdPhones] = useState<PhoneCard[]>([]);
+const Products = ({ params }: { params: { category: string } }) => {
+  const [filterdProducts, setFilterdProducts] = useState<ProductCard[]>([]);
 
-  //   console.log(params);
+  const { data, isLoading, error } = useCustomeFetch<ProductCard[]>(
+    `/product/getproductsofcategory?catName=${params.category}`
+  );
+
   useEffect(() => {
-    const phones = async () => {
-      return await getProducts(params.category);
-    };
-    phones().then((res) => {
-      setPhones(res);
-      setFilterdPhones(res);
-    });
-  }, []);
-
-  console.log(phones);
+    if (data) setFilterdProducts(data);
+  }, [data]);
 
   const select = useSelectore(
     (state) => state.ManufacturerSliceReducer.manufacturerid
@@ -30,37 +27,71 @@ const Phones = ({ params }: { params: { category: string } }) => {
   );
 
   useEffect(() => {
-    if (select == 0) {
-      setFilterdPhones(() => [...phones]);
-    } else {
-      setFilterdPhones(() => [
-        ...phones.filter((phone) => phone.manufacturerId === select),
-      ]);
+    if (data) {
+      if (select == 0) {
+        setFilterdProducts(() => [...data]);
+      } else {
+        setFilterdProducts(() => [
+          ...data.filter((product) => product.manufacturerId === select),
+        ]);
+      }
     }
   }, [select]);
 
   useEffect(() => {
-    setFilterdPhones(() => [
-      ...phones.filter((phone) =>
-        phone.title.toLowerCase().startsWith(selectName.toLowerCase())
-      ),
-    ]);
+    if (data) {
+      setFilterdProducts(() => [
+        ...data.filter((product) =>
+          product.title.toLowerCase().startsWith(selectName.toLowerCase())
+        ),
+      ]);
+    }
   }, [selectName]);
 
+  const override: CSSProperties = {
+    display: "block",
+    margin: "0 auto",
+    borderColor: "red",
+  };
+
+  if (isLoading) {
+    return (
+      <div className="w-full min-h-[100vh] flex justify-center items-center">
+        <HashLoader
+          loading={isLoading}
+          cssOverride={override}
+          color={"#006d1d"}
+          size={80}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />
+      </div>
+    );
+  }
+  if (error) {
+    return (
+      <div className=" min-h-[100vh] flex justify-center items-center">
+        <Alert severity="error" className="w-full py-6">
+          <AlertTitle>Error</AlertTitle>
+          {error}
+        </Alert>
+      </div>
+    );
+  }
   return (
     <section className="mt-8">
       <div className="grid_card">
-        {filterdPhones &&
-          filterdPhones.map((phone) => (
+        {filterdProducts &&
+          filterdProducts.map((product) => (
             <Card
               cardClass="card_plus"
-              key={phone.id}
-              title={phone.title}
-              description={phone.description}
-              id={phone.id}
-              review={phone.review}
+              key={product.id}
+              title={product.title}
+              description={product.description}
+              id={product.id}
+              review={product.review}
               categoryName={params.category}
-              // imageUrl={phone.imageUrl}
+              // imageUrl={product.imageUrl}
             />
           ))}
       </div>
@@ -68,4 +99,4 @@ const Phones = ({ params }: { params: { category: string } }) => {
   );
 };
 
-export default Phones;
+export default Products;

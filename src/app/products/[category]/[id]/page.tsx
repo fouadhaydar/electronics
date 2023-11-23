@@ -1,142 +1,82 @@
 "use client";
 import Image from "next/image";
 import image from "../../../../../public/assets/phones/Imgs.png";
-import {
-  ArrowDownCircle,
-  ArrowLeftCircle,
-  ArrowRightCircle,
-  ArrowUpCircle,
-  Star,
-  StarFill,
-} from "react-bootstrap-icons";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { StarFill } from "react-bootstrap-icons";
+import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 import uuid from "react-uuid";
-import RatingSysteme from "@/app/products/(components)/RatingSysteme";
-import HorizontalSlider from "@/components/HorizentalSlider";
-import Card from "@/components/Card";
 import { useSelectore } from "@/redux/store";
 import { useDispatch } from "react-redux";
 import { addToCart } from "@/redux/features/product-slice";
-import { getOneProduct, getProductsOfManufacturer } from "@/app/fetchData";
-import { PhoneCard, ProductDetails, ProductVariation } from "@/types";
+import { ProductDetails, ProductInCart, ProductVariation } from "@/types";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-// import NewProductSection from "@/components/NewProductSection"
-// import Nav from "@/components/Nav"
-
-interface ColorsSelected {
-  color: string;
-}
-interface StorageRamSlected {
-  storageRam: string;
-}
-
-type VariantArray = {
-  [key: string]: string[];
-};
+import useCustomeFetch from "@/hooks/useCustomeFetch";
+import { CSSProperties } from "styled-components";
+import { HashLoader } from "react-spinners";
+import { Alert, AlertTitle } from "@mui/material";
+import { setUserCredentials } from "@/redux/features/auth/userSlice";
+import RelatedProducts from "./components/sections/RelatedProducts";
+import InformationsSection from "./components/sections/InformationsSection";
+import { setProductInLocalStoage } from "@/functions/LocalStorageFunctions";
+import QuantityBtn from "./components/btns/QuantityBtn";
+import OptionBtn from "./components/btns/OptionBtn";
+import { reducer } from "./function/reducerFunction";
 
 const ProductDettails = ({ params }: { params: { id: string } }) => {
-  const [details, setDetails] = useState<ProductDetails>();
-
-  const [variantKeys, setVariantKeys] = useState<string[]>([]);
   const [variantValues, setVariantValues] = useState<string[]>([]);
   const [variantObj, setVariantObj] = useState<VariantArray>();
-  const [lodaing, setLoding] = useState(false);
-  const [targetProduct, setTargetProduct] = useState<
-    ProductVariation | undefined
-  >();
+  // from backend
   const [quantity, setQuantity] = useState<number>(0);
   const [price, setPrice] = useState(0);
-  const [totalPrice, setTotalPrice] = useState(0);
+
+  const [state, localDispatch] = useReducer(
+    (state: State, action: ActionType) =>
+      reducer(state, action, quantity, price),
+    { counter: 0, totalPrice: 0, error: null }
+  );
   const [starsArr, setStarsArr] = useState<number[]>([]);
-  const [showReview, setShowReview] = useState(false);
-  const [recomandationProducts, setRecomandationProducts] = useState<
-    PhoneCard[]
-  >([]);
-  const [counter, setCounter] = useState(0);
-  const [heightFull, setHeight] = useState(false);
-  const [translateX, setTranslateX] = useState(0);
+
   const [selectedStorageRam, setSlectedStorageRam] =
     useState<StorageRamSlected>({ storageRam: "" });
   const [selectedColor, setSelectedColor] = useState<ColorsSelected>({
     color: "",
   });
-  // const [variantId, setVariantId] = useState<string>("");
-  const ref = useRef<HTMLDivElement>(null);
+  const [targetProductId, setTargetProductId] = useState<string | undefined>(
+    undefined
+  );
   const dispatch = useDispatch();
-  // get products in cart
+  // get products existe in cart
   const products = useSelectore((state) => state.CartSliceSliceReducer.cart);
+  // get accessToken
+  const token = useSelectore((state) => state.user.token);
 
-  // fetch data
+  // fetch and return details
+  const {
+    data: details,
+    isLoading,
+    error,
+  } = useCustomeFetch<ProductDetails>(`/product/getoneproduct?id=${params.id}`);
+
+  // set stars
   useEffect(() => {
-    const productDetails = async () => {
-      const data = await getOneProduct(params.id);
-      if (data != undefined) {
-        setStarsArr(() => [
-          data.stars5,
-          data.stars4,
-          data.stars3,
-          data.stars2,
-          data.stars1,
-        ]);
-        setDetails(data);
-        setLoding(true);
-      }
-    };
-    productDetails();
-  }, [params.id]);
+    if (details) {
+      setStarsArr(() => [
+        details.stars5,
+        details.stars4,
+        details.stars3,
+        details.stars2,
+        details.stars1,
+      ]);
+      buildVariations(details);
+    }
+  }, [details]);
 
   // get the index of the selected product
   const productIndex = useMemo(
     () =>
-      products.findIndex((product) => targetProduct?.id == product.variationId),
-    [products, targetProduct?.id]
+      products.findIndex((product) => targetProductId == product.variationId),
+    [products, targetProductId]
   );
-
-  // console.log(details);
-
-  // const productFind = useMemo(
-  //   () =>
-  //     products.find((product) => {
-  //       // console.log(product.variationId);
-  //       return details?.productVariantDetailVM.find(
-  //         (variant) => variant.id === product.variationId
-  //       );
-  //     }),
-  //   [details?.productVariantDetailVM, products]
-  // );
-  // console.log(productFind);
-  // details?.productVariantDetailVM.find(v => v.id == products)
-
-  // useEffect(() => {
-  //   if (productFind) {
-  //     setSelectedColor(() => ({ color: productFind?.color }));
-  //     setSlectedStorageRam(() => ({ storageRam: productFind.ramStorage }));
-  //   }
-  // }, [productFind]);
-  // console.log(details);
-  // get recomandation products
-  useEffect(() => {
-    if (details) {
-      buildVariations(details);
-    }
-    const ProductsOfManufacturer = async () => {
-      if (details) {
-        const products: [] = await getProductsOfManufacturer(
-          details?.manufacturerId
-        );
-        if (products != undefined)
-          setRecomandationProducts(() => [...products]);
-      }
-    };
-    ProductsOfManufacturer();
-  }, [details]);
-
-  useEffect(() => {
-    setSlectedStorageRam(() => ({ storageRam: variantKeys[0] }));
-    variantObj && setVariantValues(() => [...variantObj[variantKeys[0]]]);
-  }, [variantKeys, variantObj]);
 
   const getVariantKeys = useMemo(() => {
     if (details) {
@@ -145,16 +85,18 @@ const ProductDettails = ({ params }: { params: { id: string } }) => {
     return [];
   }, [details]);
 
-  // console.log(selectedStorageRam.storageRam);
-
   const buildVariations = (data: ProductDetails) => {
     if (data) {
       let objKeys: string[] = [];
       const variantObj: VariantArray = {};
       let keys = getVariantKeys;
+      let keyOption: string = "";
 
-      data.productVariantDetailVM.forEach((option) => {
-        // get key
+      data.productVariantDetailVM.forEach((option, index) => {
+        //
+        if (index === 0) {
+          keyOption = option.optionsValues[keys[0]];
+        }
         if (variantObj.hasOwnProperty(option.optionsValues[keys[0]])) {
           variantObj[option.optionsValues[keys[0]]].push(
             option.optionsValues[keys[1]]
@@ -167,11 +109,14 @@ const ProductDettails = ({ params }: { params: { id: string } }) => {
           );
         }
       });
-      setVariantKeys(() => [...objKeys]);
+      handleSelectStorageRam(keyOption);
+      setVariantValues(() => [...variantObj[keyOption]]);
       setVariantObj(() => ({ ...variantObj }));
     }
   };
 
+  // set the default [price , quantity] values of the target product
+  // when we change the target color + return the variant obj
   const setTargetProductDetails = (color: string) => {
     if (details) {
       let keys = getVariantKeys;
@@ -184,117 +129,115 @@ const ProductDettails = ({ params }: { params: { id: string } }) => {
       if (targetProductObj) {
         setQuantity(targetProductObj.qty);
         setPrice(targetProductObj.price);
-        setTotalPrice(targetProductObj.price);
         return targetProductObj;
       }
     }
-    // return "";
-    // setTargetProductId(variant.id);
   };
 
   const handleSelectColor = (color: string) => {
     setSelectedColor(() => ({ color }));
-    const obj = setTargetProductDetails(color);
-    // console.log(obj);
+    let obj = setTargetProductDetails(color);
     if (obj) {
-      // setTargetProduct(() => ({...obj}))
-      setTargetProduct(obj);
+      setTargetProductId(obj.id);
     }
-    if (counter == 0) handlePlus(true, obj?.qty);
-    else {
-      setCounter(1);
-    }
+    localDispatch("reset-to-one");
   };
   // select storage
   const handleSelectStorageRam = (option: string) => {
     setSlectedStorageRam(() => ({ storageRam: option }));
     setSelectedColor(() => ({ color: "" }));
-    setCounter(0);
+    localDispatch("reset-to-zero");
     if (price > 0) setPrice(0);
     variantObj && setVariantValues(() => [...variantObj[option]]);
-    setTargetProduct(undefined);
+    setTargetProductId(undefined);
   };
 
   // update quantity
-  const handleMinus = () => {
-    if (selectedColor.color.length > 0 && counter > 1) {
-      setCounter((prev) => (prev -= 1));
-      setTotalPrice((prev) => (prev -= price));
+  const decrement = useCallback(() => {
+    if (selectedColor.color.length > 0) {
+      localDispatch("decrement");
       return;
     }
-  };
-  const handlePlus = (formColor: boolean, quantity: number | undefined) => {
-    if (selectedColor.color.length == 0 && !formColor) {
-      toast.warn("please select a color", {
-        theme: "light",
-      });
-      return;
-    }
-    if (quantity != undefined && quantity > counter) {
-      setCounter((prev) => (prev += 1));
-      setTotalPrice((prev) => (prev += price));
-      return;
-    }
-    toast.warn(`we only have ${quantity} from this combination`, {
-      theme: "light",
-    });
-  };
+  }, [selectedColor]);
 
-  const getFullHeight = () => setHeight((prev) => !prev);
-
+  const increment = useCallback(
+    (formColor: boolean) => {
+      if (selectedColor.color.length == 0 && !formColor) {
+        toast.warn("please select a color", {
+          theme: "light",
+        });
+        return;
+      }
+      localDispatch("increment");
+    },
+    [selectedColor]
+  );
   // add to cart
   const handleAddToCart = () => {
-    if (counter == 0) {
+    if (state.counter == 0) {
       toast.warn("please select a color", {
         theme: "light",
       });
       return;
     }
-    if (details && targetProduct)
+    if (details && targetProductId)
       if (productIndex != -1) {
         toast.warn("product alredy existe", {
           theme: "light",
         });
         return;
       } else {
-        dispatch(
-          addToCart({
-            name: details.title,
-            productId: params.id,
-            variationId: targetProduct.id,
-            category: details.category,
-            imageUrl: details.imageUrl,
-            price: totalPrice,
-            quantity: counter,
-            color: selectedColor.color,
-            ramStorage: selectedStorageRam.storageRam,
-          })
-        );
+        const product = {
+          name: details.title,
+          productId: params.id,
+          variationId: targetProductId,
+          category: details.category,
+          imageUrl: details.imageUrl,
+          price: state.totalPrice,
+          quantity: state.counter,
+          color: selectedColor.color,
+          ramStorage: selectedStorageRam.storageRam,
+        };
+        dispatch(addToCart(product));
+        setProductInLocalStoage(product, state.totalPrice);
+        toast.success("product was added", {
+          theme: "light",
+        });
       }
-
-    toast.success("product was added", {
-      theme: "light",
-    });
   };
-
-  // switch between the specifications and review
-  const translateNgative = () => {
-    if (ref?.current) {
-      setHeight(false);
-      setTranslateX(-ref.current?.offsetWidth);
-      setShowReview(true);
-    }
-  };
-  const translatePositive = () => {
-    if (ref?.current) {
-      setTranslateX(0);
-      setShowReview(false);
-    }
-  };
-
   // data dose not fetched yet
-  if (!lodaing) {
-    return <div>Loding ...</div>;
+
+  const override: CSSProperties = {
+    display: "block",
+    margin: "0 auto",
+    borderColor: "red",
+  };
+
+  if (isLoading) {
+    return (
+      <div className="w-full min-h-[100vh] flex justify-center items-center">
+        <HashLoader
+          loading={isLoading}
+          cssOverride={override}
+          color={"#006d1d"}
+          size={80}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />
+      </div>
+    );
+  }
+  if (error) {
+    if (error) {
+      return (
+        <div className=" min-h-[100vh] flex justify-center items-center">
+          <Alert severity="error" className="w-full py-6">
+            <AlertTitle className="font-bold">Error</AlertTitle>
+            {error}
+          </Alert>
+        </div>
+      );
+    }
   }
   return (
     <>
@@ -325,21 +268,15 @@ const ProductDettails = ({ params }: { params: { id: string } }) => {
             <div className=" flex flex-col justify-start gap-2">
               <span className="text-gray-400">RAM / Storage</span>
               <div className="flex flex-wrap items-center gap-2 ">
-                {variantKeys.length > 0 &&
-                  variantKeys.map((option) => {
+                {variantObj &&
+                  Object.keys(variantObj).map((option) => {
                     return (
-                      <div key={uuid()}>
-                        <button
-                          className={`${
-                            selectedStorageRam.storageRam == option
-                              ? "bg-blue-400 text-white"
-                              : "bg-white text-black"
-                          } border  border-black  rounded-[4px] p-2 text-[12px] btn_hover`}
-                          onClick={() => handleSelectStorageRam(option)}
-                        >
-                          {option}
-                        </button>
-                      </div>
+                      <OptionBtn
+                        key={uuid()}
+                        option={option}
+                        storageRam={selectedStorageRam.storageRam}
+                        handleSelectStorageRam={handleSelectStorageRam}
+                      />
                     );
                   })}
               </div>
@@ -375,18 +312,12 @@ const ProductDettails = ({ params }: { params: { id: string } }) => {
             {/* add to cart and quntity */}
             <div className="flex xsm:flex-col md:flex-row justify-between md:items-end xsm:items-start gap-2">
               <div className="flex xsm:flex-col md:flex-row justify-start gap-2 ">
-                <div className="border border-black px-2 py-1 max-w-[70px] rounded-[4px] flex items-center justify-center">
-                  <span onClick={handleMinus} className=" cursor-pointer p-1 ">
-                    -
-                  </span>{" "}
-                  <span className="p-1">{counter}</span>{" "}
-                  <span
-                    onClick={() => handlePlus(false, quantity)}
-                    className=" p-1 cursor-pointer"
-                  >
-                    +
-                  </span>
-                </div>
+                <QuantityBtn
+                  selectedColor={selectedColor}
+                  handleMinus={decrement}
+                  handlePlus={increment}
+                  counter={state.counter}
+                />
                 <button
                   className="px-3 py-2 border border-black rounded-[4px] btn_hover"
                   onClick={handleAddToCart}
@@ -395,106 +326,24 @@ const ProductDettails = ({ params }: { params: { id: string } }) => {
                 </button>
               </div>
               <span className="text-black">
-                Price: {counter == 1 || price == 0 ? price : totalPrice} $
+                Price:{" "}
+                {state.counter == 1 || price == 0 ? price : state.totalPrice} $
               </span>
             </div>
+            {state.error && <p className="text-red-500">{state.error} </p>}
           </div>
         </div>
         {/* reviews and description */}
-        <hr className="bg-black w-full h-[1px]" />
-        <div className="flex flex-col gap-6">
-          {/* specification & reviews switcher */}
-          <div className="flex gap-4 justify-center">
-            <h3
-              className={`${
-                translateX == 0 ? "font-bold scale-105" : "font-normal"
-              } section_title cursor-pointer`}
-              onClick={translatePositive}
-            >
-              Detailed Specification
-            </h3>
-            <h3
-              onClick={translateNgative}
-              className={`${
-                translateX < 0 ? "font-bold scale-105" : "font-normal"
-              } section_title cursor-pointer`}
-            >
-              Reviews [5]
-            </h3>
-          </div>
-          <div className="overflow-hidden ">
-            <div
-              className={`flex w-[200%] ${
-                !heightFull ? "h-[350px]" : "h-full"
-              } relative`}
-            >
-              {/*  full specification */}
-              <div
-                className={`overflow-hidden mb-16 w-[100%] transition ease-in-out duration-150 ${
-                  !heightFull && "gradient"
-                }`}
-                style={{ transform: `translateX(${translateX}px)` }}
-                ref={ref}
-              >
-                {/* render specification */}
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: details?.specification || "",
-                  }}
-                />
-              </div>
-              {!heightFull ? (
-                <ArrowDownCircle
-                  className="absolute bottom-0 left-[25%]"
-                  size={20}
-                  onClick={getFullHeight}
-                />
-              ) : (
-                <ArrowUpCircle
-                  className="absolute bottom-0 left-[25%]"
-                  size={20}
-                  onClick={getFullHeight}
-                />
-              )}
-              {/* reviews */}
-              {details && (
-                <RatingSysteme
-                  x={translateX}
-                  totalNum={details!.nummberOfReview}
-                  s={starsArr}
-                  show={showReview}
-                />
-              )}
-            </div>
-            {/* </div> */}
-          </div>
-        </div>
-        <hr className="bg-black w-full h-[1px]" />
-
+        {details && (
+          <InformationsSection
+            starsArr={starsArr}
+            numberOfReviews={details.nummberOfReview}
+            sepcification={details.specification}
+            productId={params.id}
+          />
+        )}
         {/* related Products */}
-        <div className="my-16 h-[500px]">
-          <h3 className="section_title">Related Products</h3>
-          {/* cart of new product */}
-          {recomandationProducts.length > 0 && (
-            <HorizontalSlider
-              PrevElement={ArrowLeftCircle}
-              NextElement={ArrowRightCircle}
-            >
-              {recomandationProducts.map((product) => {
-                return (
-                  <Card
-                    title={product.title}
-                    description={product.description}
-                    cardClass="card"
-                    id={product.id}
-                    key={product.id}
-                    review={product.review}
-                  />
-                );
-              })}
-            </HorizontalSlider>
-          )}
-        </div>
+        {details && <RelatedProducts manufacturerId={details.manufacturerId} />}
       </section>
     </>
   );
