@@ -7,9 +7,9 @@ const AlertComponent = ({
   text,
   logIn,
 }: {
-  errorMessage: string;
+  errorMessage: string | null;
   text: string;
-  logIn: boolean;
+  logIn: boolean | null;
 }) => {
   return (
     <Alert
@@ -18,12 +18,14 @@ const AlertComponent = ({
     >
       <AlertTitle className="font-bold">Error</AlertTitle>
       {errorMessage} <strong>{text}</strong>
-      <Link
-        href={`/${logIn ? "sign-up" : "log-in"}`}
-        className="mx-2 min-h-[30px] text-blue-500 cursor-pointer font-bold border-b-2 border-blue-500"
-      >
-        {logIn ? "sign-up" : "log-in"}
-      </Link>
+      {logIn != null && (
+        <Link
+          href={`/${logIn ? "sign-up" : "log-in"}`}
+          className="mx-2 min-h-[30px] text-blue-500 cursor-pointer font-bold border-b-2 border-blue-500"
+        >
+          {logIn ? "sign-up" : "log-in"}
+        </Link>
+      )}
     </Alert>
   );
 };

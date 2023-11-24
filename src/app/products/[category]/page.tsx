@@ -14,7 +14,6 @@ const Products = ({ params }: { params: { category: string } }) => {
   const { data, isLoading, error } = useCustomeFetch<ProductCard[]>(
     `/product/getproductsofcategory?catName=${params.category}`
   );
-
   useEffect(() => {
     if (data) setFilterdProducts(data);
   }, [data]);

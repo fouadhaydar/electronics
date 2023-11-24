@@ -2,11 +2,11 @@
 import AuthScreenStyle from "@/app/(auth)/components/AuthScreenStyle";
 import Image from "next/image";
 import { Form, Formik, FormikHelpers } from "formik";
-import { InputAdornment, TextField } from "@mui/material";
+import { Alert, AlertTitle, InputAdornment, TextField } from "@mui/material";
 import { logInValidation } from "../../validation/validationShema";
 import { LogInValues } from "@/types";
 import { useState } from "react";
-import { EyeFill, EyeSlashFill } from "react-bootstrap-icons";
+import { EyeFill, EyeSlashFill, Flag } from "react-bootstrap-icons";
 import Link from "next/link";
 import Nav from "@/components/navBar/Nav";
 import { useDispatch } from "react-redux";
@@ -20,6 +20,10 @@ import AlertComponent from "../components/AlertComponent";
 const LogIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState(false);
+  const [forgetPasswordMessage, setForgetPasswordMessage] = useState<
+    string | null
+  >(null);
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -41,6 +45,9 @@ const LogIn = () => {
     { setValues, setTouched }: FormikHelpers<LogInValues>
   ) => {
     const controller = new AbortController();
+    setErrorMessage(null);
+    setForgetPasswordMessage(null);
+    setSuccessMessage(false);
     try {
       const response = await axiosAuth({
         url: "/user/login",
@@ -61,6 +68,25 @@ const LogIn = () => {
       setErrorMessage("This Account Dose Not existe");
     }
   };
+  const handleForgetPassword = async (email: string) => {
+    setErrorMessage(null);
+    setForgetPasswordMessage(null);
+    setSuccessMessage(false);
+    if (email == "") {
+      setForgetPasswordMessage("Please enter your Email To reset your passord");
+    } else {
+      try {
+        const res = await axiosAuth({
+          url: `user/forgotpassword?email=${email}`,
+          withCredentials: false,
+        });
+        setSuccessMessage(true);
+      } catch (error) {
+        setErrorMessage("User Dose Not existe");
+      }
+    }
+  };
+
   return (
     <>
       <Nav bgColor="bg-white" />
@@ -147,11 +173,14 @@ const LogIn = () => {
                         />
 
                         <div className="w-full flex justify-between items-center">
-                          <Link href={"/sign-up"}>
-                            <span className="text-blue-500">
-                              Forget Password ?
-                            </span>
-                          </Link>
+                          {/* <Link href={"/"}> */}
+                          <span
+                            className="text-blue-500"
+                            onClick={() => handleForgetPassword(values.email)}
+                          >
+                            Forget Password ?
+                          </span>
+                          {/* </Link> */}
                         </div>
                         <div className="flex xsm:flex-col md:flex-row justify-between w-full items-cente gap-2">
                           <button className="bg-black flex-1 text-white rounded-[5px] p-[10px] flex items-center justify-center gap-2">
@@ -175,12 +204,24 @@ const LogIn = () => {
                   );
                 }}
               </Formik>
-              {errorMessage && (
+              {(errorMessage || forgetPasswordMessage) && (
                 <AlertComponent
-                  text="Create new Account"
-                  errorMessage={errorMessage}
-                  logIn={true}
+                  text={errorMessage ? "Create new Account" : ""}
+                  errorMessage={
+                    errorMessage ? errorMessage : forgetPasswordMessage
+                  }
+                  logIn={errorMessage ? true : false}
                 />
+              )}
+              {successMessage && (
+                <Alert
+                  severity="success"
+                  className="w-full p-4 rounded-md items-start min-h-full"
+                >
+                  <AlertTitle className="font-bold">Success</AlertTitle>
+                  Please Check you email and{" "}
+                  <strong> Click Reset Password </strong>
+                </Alert>
               )}
             </div>
           </div>

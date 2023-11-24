@@ -54,3 +54,12 @@ export const billingValidation = object().shape({
     .required(phoneNumberHelperText)
     .matches(regPhoneNumber, phoneNumberHelperText),
 });
+
+export const resetPasswordValidation = object().shape({
+  password: string()
+    .matches(regPassword, passwordHelperText)
+    .required(passwordHelperText),
+  confirmePassword: string()
+    .oneOf([ref("password")], "Your Confirmation Is Wrong")
+    .required("Please Confirm Your Password"),
+});
