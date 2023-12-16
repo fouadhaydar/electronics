@@ -103,3 +103,9 @@ interface shippingInfo {
   streetAddress: string;
   phoneNumber: string;
 }
+
+interface Category {
+  id: string;
+  categoryName: string;
+  products: null;
+}

@@ -12,8 +12,11 @@ const Home = () => {
         <Nav bgColor="bg-black" />
         <Hero />
         <ProductCategory />
-        <NewProductSection header="Explore what is fresh and current, at this moment." />
-        <NewProductSection header="Special Offers" />
+        <NewProductSection
+          header="Explore what is fresh and current, at this moment."
+          specialOffer={false}
+        />
+        <NewProductSection header="Special Offers" specialOffer={true} />
       </section>
     </>
   );

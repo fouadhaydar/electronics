@@ -65,8 +65,8 @@ footer {
   @apply flex flex-col items-center justify-center gap-1 xsm:text-[12px] md:text-[16px];
 }
 .icon_style {
-  @apply lg:text-6xl xsm:text-3xl  hover:scale-110 hover:text-blue-500 transition duration-100 ease-out hover:ease-in cursor-pointer;
-  color: white;
+  @apply lg:text-6xl xsm:text-3xl hover:scale-110 hover:text-blue-500 transition duration-100 ease-out hover:ease-in cursor-pointer;
+  /* color: white; */
 }
 .nav_icon_link {
   @apply hover:text-blue-500 transition duration-150 ease-in-out hover:scale-110;
@@ -138,4 +138,15 @@ footer {
 
 .swiper-wrapper {
   align-items: end;
+}
+
+@media (min-width: 280px) and (max-width: 768px) {
+  .top {
+    bottom: 0;
+  }
+}
+@media (min-width: 768px) {
+  .top {
+    top: 0;
+  }
 }

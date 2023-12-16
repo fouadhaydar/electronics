@@ -66,7 +66,7 @@ const SignUp = () => {
     <>
       <Nav bgColor="bg-white" />
       <section className="h-[100vh] xsm:pt-[70px] md:pt-0 lg:mx-[50px]">
-        <div className="flex justify-center items-center w-full h-full">
+        <div className="flex justify-center items-center w-full h-full gap-3">
           <AuthScreenStyle />
           <div className="md:w-[70%] xsm:w-full">
             <div className="form_postion">
@@ -255,7 +255,7 @@ const SignUp = () => {
                           }}
                         />
                       </div>
-                      <div className="flex xsm:flex-col md:flex-row justify-between w-full items-center gap-2">
+                      <div className="flex xsm:flex-col md:flex-row justify-between w-full md:items-center  gap-2">
                         <Link href={"/log-in"} className="text-center flex-1">
                           <span className="text-blue-500">
                             Log In to your Existing account

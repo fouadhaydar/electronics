@@ -4,7 +4,7 @@ import { ArrowRightShort } from "react-bootstrap-icons";
 import CardInCart from "./CardInCart";
 import { useSelectore } from "@/redux/store";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { clearCart } from "@/redux/features/product-slice";
 import useAxiosInterceptors from "@/app/(auth)/hooks/useAxiosInterceptors";
@@ -20,6 +20,23 @@ const Cart = ({
 }) => {
   const router = useRouter();
   const token = useSelectore((state) => state.user.token);
+
+  const [innerWidth, setInnerWidth] = useState<number | undefined>(undefined);
+
+  const updateInnerWidth = () => {
+    setInnerWidth(window.innerWidth);
+  };
+
+  // Effect to add and remove the resize event listener
+  useEffect(() => {
+    // Add event listener on component mount
+    window.addEventListener("resize", updateInnerWidth);
+
+    // Remove event listener on component unmount to avoid memory leaks
+    return () => {
+      window.removeEventListener("resize", updateInnerWidth);
+    };
+  }, []);
 
   const cartProducts = useSelectore(
     (state) => state.CartSliceSliceReducer.cart
@@ -50,14 +67,20 @@ const Cart = ({
 
   return (
     <>
-      <section className="container mt-16 ">
+      <section className="container">
         {/* cards */}
         <Drawer
           anchor="right"
           open={isOpen}
           sx={{
             ".MuiDrawer-paper": {
-              width: "500px",
+              width:
+                innerWidth &&
+                (innerWidth < 400
+                  ? "250px"
+                  : innerWidth > 400 && innerWidth < 500
+                  ? "400px"
+                  : "500px"),
               gap: "30px",
               paddingX: "20px",
             },
@@ -68,7 +91,7 @@ const Cart = ({
           }}
         >
           <div className="flex justify-between my-8">
-            <h2 className="mx-4 text-xl"> Shopping Cart </h2>
+            <h2 className=" xsm:text-lg md:text-xl"> Shopping Cart </h2>
             <ArrowRightShort
               size={30}
               className="hover:text-blue-500 hover:scale-110 "
@@ -96,15 +119,15 @@ const Cart = ({
             <span className="font-bold">Totle price </span>
             <span>{totalPrice} $</span>
           </div>
-          <div className="flex justify-center gap-1">
+          <div className="flex xsm:flex-col md:flex-row justify-center gap-2 md:mb-5 xsm:mb-0">
             <button
-              className="w-full text-center bg-red-500 mb-5 text-white py-3 rounded-md"
+              className="w-full text-center bg-red-500  text-white py-3 rounded-md"
               onClick={clear}
             >
               Clear Cart
             </button>
             <button
-              className="w-full text-center gradient_blue mb-5 text-white py-3 rounded-md"
+              className="w-full text-center gradient_blue text-white py-3 rounded-md"
               onClick={handleClick}
             >
               Checkout
