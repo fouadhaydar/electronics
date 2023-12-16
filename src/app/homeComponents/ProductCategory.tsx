@@ -10,6 +10,7 @@ import Image from "next/image";
 import ipad from "../../../public/assets/categories/ipadpro11-digitalmat-gallery-1-202210.png";
 import laptop from "../../../public/assets/categories/image-from-rawpixel-id-2763835-original.png";
 import phone from "../../../public/assets/phones/iphone14-digitalmat-gallery-3-202209.png";
+import HorizontalSlider from "@/components/HorizentalSlider";
 
 const ProductCategory = () => {
   const { isLoading, data, error } = useCustomeFetch<
@@ -48,57 +49,24 @@ const ProductCategory = () => {
         <h2 className="text-gray-500 text-center md:text-4xl xsm:text-xl ">
           Products Categories
         </h2>
-        <div className="flex flex-row flex-wrap justify-around items-center lg:gap-4 sm:gap-2 w-full text-balck pt-10">
-          {data!.map((cat, i) => (
-            <div className="icon_style_container" key={cat.id}>
-              <Link href={`/products/${cat.categoryName.toLowerCase()}`}>
-                {/* <Laptop className="icon_style" /> */}
-                <Image
-                  src={i == 0 ? phone : i == 1 ? ipad : laptop}
-                  width={150}
-                  height={150}
-                  alt="image"
-                />
-              </Link>
-              <span>{cat.categoryName}</span>
-            </div>
-          ))}
-          {/* <div className="icon_style_container">
-          <Link href={"/products/laptops"}>
-            <Laptop className="icon_style" />
-          </Link>
-          <span>Laptops</span>
-        </div>
-        <div className="icon_style_container">
-          <Link href={"/products/phones"}>
-            <Phone className="icon_style" />
-          </Link>
-          <span>Smart Phone</span>
-        </div>
-        <div className="icon_style_container">
-          <Link href={"/products/tablets"}>
-            <Tablet className="icon_style" />
-          </Link>
-          <span>Tablets</span>
-        </div>
-        <div className="icon_style_container">
-          <Link href={"/pcs"}>
-            <PcDisplay className="icon_style" />
-          </Link>
-          <span>Pc</span>
-        </div>
-        <div className="icon_style_container">
-          <Link href={"/earbuds"}>
-            <Earbuds className="icon_style" />
-          </Link>
-          <span>Earbuds</span>
-        </div>
-        <div className="icon_style_container">
-          <Link href={"/smart-watches"}>
-            <Smartwatch className="icon_style" />
-          </Link>
-          <span>Smart Watches</span>
-        </div> */}
+        <div>
+          {data && (
+            <HorizontalSlider>
+              {data.map((cat, i) => (
+                <div className="icon_style_container" key={cat.id}>
+                  <Link href={`/products/${cat.categoryName.toLowerCase()}`}>
+                    <Image
+                      src={i == 0 ? phone : i == 1 ? ipad : laptop}
+                      width={150}
+                      height={150}
+                      alt="image"
+                    />
+                  </Link>
+                  <span>{cat.categoryName}</span>
+                </div>
+              ))}
+            </HorizontalSlider>
+          )}
         </div>
       </section>
     );

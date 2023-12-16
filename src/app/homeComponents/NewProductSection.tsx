@@ -1,8 +1,6 @@
 "use client";
-
-import HorizontalSlider from "../../components/HorizentalSlider";
-import { ArrowLeftCircle, ArrowRightCircle } from "react-bootstrap-icons";
 import Card from "../../components/Card";
+import HorizontalSlider from "@/components/HorizentalSlider";
 
 const NewProductSection = ({ header }: { header: string }) => {
   return (
@@ -10,13 +8,7 @@ const NewProductSection = ({ header }: { header: string }) => {
       <h2 className="text-gray-500 text-center md:text-4xl xsm:text-xl">
         {header}
       </h2>
-      {/* cart of new product */}
-      <HorizontalSlider
-        PrevElement={ArrowLeftCircle}
-        NextElement={ArrowRightCircle}
-      >
-        <Card cardClass="card" title={""} description={""} id={""} review={0} />
-        <Card cardClass="card" title={""} description={""} id={""} review={0} />
+      <HorizontalSlider>
         <Card cardClass="card" title={""} description={""} id={""} review={0} />
         <Card cardClass="card" title={""} description={""} id={""} review={0} />
         <Card cardClass="card" title={""} description={""} id={""} review={0} />
