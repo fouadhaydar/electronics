@@ -16,6 +16,9 @@ body {
   padding: 0 !important;
   overflow-y: scroll !important;
 }
+.scroll::-webkit-scrollbar {
+  display: none;
+}
 .hero {
   background-color: black;
   background-image: url("./images/HeroImage.jpg");
@@ -42,7 +45,7 @@ ul {
 }
 
 .container {
-  @apply max-w-5xl w-full mx-auto px-4;
+  @apply max-w-5xl w-[100%] mx-auto px-4;
 }
 .primary_text {
   @apply text-white xsm:text-3xl md:text-4xl lg:text-6xl font-bold;
@@ -59,7 +62,7 @@ footer {
 }
 
 .icon_style_container {
-  @apply flex flex-col items-center justify-center gap-3 p-2 xsm:text-[12px] md:text-[16px];
+  @apply flex flex-col items-center justify-center gap-1 xsm:text-[12px] md:text-[16px];
 }
 .icon_style {
   @apply lg:text-6xl xsm:text-3xl  hover:scale-110 hover:text-blue-500 transition duration-100 ease-out hover:ease-in cursor-pointer;
@@ -77,9 +80,10 @@ footer {
   -webkit-box-shadow: 0px 0px 15px -4px rgba(35, 71, 125, 0.4);
   -moz-box-shadow: 0px 0px 15px -4px rgba(35, 71, 125, 0.4);
 }
+/* md:w-[300px] xsm:w-[200px] */
 
 .card {
-  @apply md:w-[300px] md:h-[350px] xsm:w-[200px] xsm:h-[300px] flex flex-col justify-center gap-2 p-3 relative  rounded-[5px] hover:scale-105 transition duration-100 ease-in-out cursor-pointer 
+  @apply md:h-[350px]  xsm:h-[300px] flex flex-col justify-center gap-2 p-3 relative  rounded-[5px] hover:scale-105 transition duration-100 ease-in-out cursor-pointer 
   drop_shadow;
 }
 .card_plus {
@@ -130,4 +134,8 @@ footer {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 20px;
+}
+
+.swiper-wrapper {
+  align-items: end;
 }
