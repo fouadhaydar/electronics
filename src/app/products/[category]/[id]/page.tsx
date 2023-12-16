@@ -12,7 +12,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useCustomeFetch from "@/hooks/useCustomeFetch";
 import { CSSProperties } from "styled-components";
-import { HashLoader } from "react-spinners";
 import { Alert, AlertTitle } from "@mui/material";
 import { setUserCredentials } from "@/redux/features/auth/userSlice";
 import RelatedProducts from "./components/sections/RelatedProducts";
@@ -21,6 +20,7 @@ import { setProductInLocalStoage } from "@/functions/LocalStorageFunctions";
 import QuantityBtn from "./components/btns/QuantityBtn";
 import OptionBtn from "./components/btns/OptionBtn";
 import { reducer } from "./function/reducerFunction";
+import Loader from "@/components/Loader";
 
 const ProductDettails = ({ params }: { params: { id: string } }) => {
   const [variantValues, setVariantValues] = useState<string[]>([]);
@@ -214,18 +214,7 @@ const ProductDettails = ({ params }: { params: { id: string } }) => {
   };
 
   if (isLoading) {
-    return (
-      <div className="w-full min-h-[100vh] flex justify-center items-center">
-        <HashLoader
-          loading={isLoading}
-          cssOverride={override}
-          color={"#006d1d"}
-          size={80}
-          aria-label="Loading Spinner"
-          data-testid="loader"
-        />
-      </div>
-    );
+    return <Loader />;
   }
   if (error) {
     if (error) {

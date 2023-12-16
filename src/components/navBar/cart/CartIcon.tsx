@@ -8,7 +8,12 @@ const CartIcon = ({
   bgColor?: string;
   handlOpening: () => void;
 }) => {
-  const text_color = bgColor == "bg-black" ? "text-white" : "text-black";
+  const text_color =
+    bgColor == "bg-black"
+      ? "text-white"
+      : bgColor == "bg-white"
+      ? "text-black"
+      : "text-[#007aff]";
   const link_style = `${text_color} hover:text-blue-500 text-[12px] hover:scale-110`;
   const number = useSelectore(
     (state) => state.CartSliceSliceReducer.cart.length
@@ -17,7 +22,7 @@ const CartIcon = ({
     <div className="w-[20px] h-[20px] relative">
       <CartFill
         size={"20px"}
-        className={`${link_style} nav_icon_link `}
+        className={`${link_style} nav_icon_link`}
         onClick={() => {
           handlOpening();
         }}

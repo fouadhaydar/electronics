@@ -7,12 +7,13 @@ import Fade from "@mui/material/Fade";
 import { useState } from "react";
 import Link from "next/link";
 import { ChevronDown, ChevronUp } from "react-bootstrap-icons";
+import { Category } from "@/types";
 
 export default function DropDownMen({
   menuItem,
   color,
 }: {
-  menuItem: string[];
+  menuItem: Category[];
   color: string;
 }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -58,10 +59,13 @@ export default function DropDownMen({
         onClose={handleClose}
         TransitionComponent={Fade}
       >
-        {menuItem.map((item) => {
+        {menuItem.map((cat) => {
           return (
-            <Link href={`/${item}`} key={item}>
-              <MenuItem onClick={handleClose}>{item}</MenuItem>
+            <Link
+              href={`/products/${cat.categoryName.toLowerCase()}`}
+              key={cat.id}
+            >
+              <MenuItem onClick={handleClose}>{cat.categoryName}</MenuItem>
             </Link>
           );
         })}

@@ -1,12 +1,11 @@
 "use client";
 import Card from "@/components/Card";
+import Loader from "@/components/Loader";
 import useCustomeFetch from "@/hooks/useCustomeFetch";
 import { useSelectore } from "@/redux/store";
 import { ProductCard } from "@/types";
 import { Alert, AlertTitle } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { BarLoader, HashLoader } from "react-spinners";
-import { CSSProperties } from "styled-components";
 
 const Products = ({ params }: { params: { category: string } }) => {
   const [filterdProducts, setFilterdProducts] = useState<ProductCard[]>([]);
@@ -47,25 +46,8 @@ const Products = ({ params }: { params: { category: string } }) => {
     }
   }, [selectName]);
 
-  const override: CSSProperties = {
-    display: "block",
-    margin: "0 auto",
-    borderColor: "red",
-  };
-
   if (isLoading) {
-    return (
-      <div className="w-full min-h-[100vh] flex justify-center items-center">
-        <HashLoader
-          loading={isLoading}
-          cssOverride={override}
-          color={"#006d1d"}
-          size={80}
-          aria-label="Loading Spinner"
-          data-testid="loader"
-        />
-      </div>
-    );
+    return <Loader />;
   }
   if (error) {
     return (
