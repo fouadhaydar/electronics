@@ -235,7 +235,7 @@ const ProductDettails = ({ params }: { params: { id: string } }) => {
           {/* image */}
           <div className="xsm:hidden lg:block w-[30%] p-10">
             <Image
-              src={details!.imageUrl}
+              src={details?.imageUrl || ""}
               width={300}
               height={400}
               alt={"image"}

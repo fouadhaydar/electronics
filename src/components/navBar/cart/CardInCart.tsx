@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import img from "../../../../public/assets/phones/Imgs.png";
+
 import { useState } from "react";
 import { XCircle } from "react-bootstrap-icons";
 import { useSelectore } from "@/redux/store";
@@ -20,12 +20,7 @@ const CardInCart = ({
   color,
   ramStorage,
 }: ProductInCart) => {
-  // const quantity = useSelectore(
-  //   (state) => state.CartSliceSliceReducer.cart
-  // );
   const dispatch = useDispatch();
-  // const handlePlus = () => dispatch(increase("123"));
-  // const handleMinus = () => dispatch(decrease("123"));
 
   const handleDelete = () => {
     dispatch(removeFromeCart({ id: variationId, price }));
@@ -35,7 +30,7 @@ const CardInCart = ({
     <div className="w-full">
       <div className="flex justify-between gap-6 w-full h-[150px] mb-4">
         <div className=" w-1/4 my-auto">
-          <Image src={img} alt="phone" />
+          <Image src={imageUrl} alt="phone" />
         </div>
         <div className="flex flex-col  justify-around h-full w-3/4 px-2 gap-[4px]">
           <div className="flex justify-between items-center">
