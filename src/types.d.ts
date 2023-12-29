@@ -65,6 +65,7 @@ interface ProductCard {
   name: string;
   manufacturerId: number;
   review: number;
+  imageUrl: string;
 }
 
 // type ProductInCartWithId = {
@@ -85,6 +86,7 @@ interface ProductDetails extends Product {
   category: string;
   nummberOfReview: number;
   productVariantDetailVM: ProductVariation[];
+  imageUrl: string;
 }
 
 // https://api/product/postReview
@@ -108,4 +110,5 @@ interface Category {
   id: string;
   categoryName: string;
   products: null;
+  imgeUrl: string;
 }

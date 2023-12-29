@@ -1,19 +1,17 @@
 "use client";
 import Image from "next/image";
-import image from "../../../../../public/assets/phones/Imgs.png";
 import { StarFill } from "react-bootstrap-icons";
 import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 import uuid from "react-uuid";
 import { useSelectore } from "@/redux/store";
 import { useDispatch } from "react-redux";
 import { addToCart } from "@/redux/features/product-slice";
-import { ProductDetails, ProductInCart, ProductVariation } from "@/types";
+import { ProductDetails } from "@/types";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useCustomeFetch from "@/hooks/useCustomeFetch";
 import { CSSProperties } from "styled-components";
 import { Alert, AlertTitle } from "@mui/material";
-import { setUserCredentials } from "@/redux/features/auth/userSlice";
 import RelatedProducts from "./components/sections/RelatedProducts";
 import InformationsSection from "./components/sections/InformationsSection";
 import { setProductInLocalStoage } from "@/functions/LocalStorageFunctions";
@@ -236,7 +234,12 @@ const ProductDettails = ({ params }: { params: { id: string } }) => {
         <div className="flex xsm:flex-col lg:flex-row gap-4 items-center p-5">
           {/* image */}
           <div className="xsm:hidden lg:block w-[30%] p-10">
-            <Image src={image} height={400} alt={"phone"} />
+            <Image
+              src={details!.imageUrl}
+              width={300}
+              height={400}
+              alt={"image"}
+            />
           </div>
           {/* details */}
           <div className="flex flex-col gap-6 w-[70%]">

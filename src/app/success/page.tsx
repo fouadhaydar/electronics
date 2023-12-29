@@ -17,7 +17,6 @@ const Success = () => {
 
     return () => clearTimeout(timeoutId);
   }, []);
-  console.log("outside setTime out");
   return (
     <section className="container mt-12 h-[100vh] flex items-center w-full">
       <Alert severity="success" className="w-full py-6 rounded-md">

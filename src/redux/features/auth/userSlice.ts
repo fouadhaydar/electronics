@@ -20,7 +20,6 @@ const userSlice = createSlice({
       const { email, token } = action.payload;
       state.email = email;
       state.token = token;
-      // console.log(email, token);
     },
     logOut: (state) => {
       state.email = null;

@@ -7,9 +7,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { clearCart } from "@/redux/features/product-slice";
-import useAxiosInterceptors from "@/app/(auth)/hooks/useAxiosInterceptors";
-import { setUserCredentials } from "@/redux/features/auth/userSlice";
-import useSetToken from "@/hooks/useSetToken";
 
 const Cart = ({
   isOpen,
@@ -29,9 +26,10 @@ const Cart = ({
 
   // Effect to add and remove the resize event listener
   useEffect(() => {
+    // set inner width to the default screen size
+    setInnerWidth(window.innerWidth);
     // Add event listener on component mount
     window.addEventListener("resize", updateInnerWidth);
-
     // Remove event listener on component unmount to avoid memory leaks
     return () => {
       window.removeEventListener("resize", updateInnerWidth);

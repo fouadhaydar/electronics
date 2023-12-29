@@ -20,8 +20,6 @@ const PaymentPage = () => {
   );
   const router = useRouter();
 
-  console.log(products);
-
   const getData = () => {
     let data: Object[] = [];
     products.forEach((product) => {
@@ -38,7 +36,6 @@ const PaymentPage = () => {
   useEffect(() => {
     const data = getData();
     const controller = new AbortController();
-    console.log(data);
 
     (async () => {
       try {
@@ -47,7 +44,6 @@ const PaymentPage = () => {
           data: JSON.stringify(data),
           signal: controller.signal,
         });
-        console.log(res.data.clientSecret);
         setClientSecret(res.data.clientSecret);
       } catch {
         router.push("/log-in");

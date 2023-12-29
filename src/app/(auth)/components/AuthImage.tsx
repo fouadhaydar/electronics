@@ -1,5 +1,5 @@
 import Image from "next/image";
-import phone from "../../../../public/assets/phones/iphone-compare-iphone-15-pro-202309.jpeg";
+import phone from "../../../../public/assets/phones/Imgs.png";
 
 const AuthImage = () => {
   return (

@@ -38,11 +38,8 @@ const Checkout = () => {
     if (!token) {
       const refreshToken = async () => {
         const token = await refresh();
-        console.log(token);
       };
       refreshToken();
-    } else {
-      console.log("token already exist");
     }
   }, []);
 
