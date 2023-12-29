@@ -1,5 +1,5 @@
 import Image from "next/image";
-import phone from "../../../../public/assets/phones/Imgs.png";
+import phone from "../../../../public/assets/Imgs.png";
 
 const AuthImage = () => {
   return (

@@ -4,7 +4,6 @@ import HorizontalSlider from "@/components/HorizentalSlider";
 import useCustomeFetch from "@/hooks/useCustomeFetch";
 import { ProductCard } from "@/types";
 import React from "react";
-import { ArrowLeftCircle, ArrowRightCircle } from "react-bootstrap-icons";
 
 const RelatedProducts = ({ manufacturerId }: { manufacturerId: number }) => {
   const {
