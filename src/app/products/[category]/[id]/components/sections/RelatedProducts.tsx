@@ -29,10 +29,7 @@ const RelatedProducts = ({ manufacturerId }: { manufacturerId: number }) => {
         <h3 className="section_title">Related Products</h3>
         {/* cart of new product */}
         {recomandationProducts && (
-          <HorizontalSlider
-            PrevElement={ArrowLeftCircle}
-            NextElement={ArrowRightCircle}
-          >
+          <HorizontalSlider>
             {recomandationProducts.map((product) => {
               return (
                 <Card
@@ -42,6 +39,7 @@ const RelatedProducts = ({ manufacturerId }: { manufacturerId: number }) => {
                   id={product.id}
                   key={product.id}
                   review={product.review}
+                  imageUrl={product.imageUrl}
                 />
               );
             })}

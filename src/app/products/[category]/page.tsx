@@ -72,7 +72,7 @@ const Products = ({ params }: { params: { category: string } }) => {
               id={product.id}
               review={product.review}
               categoryName={params.category}
-              // imageUrl={product.imageUrl}
+              imageUrl={product.imageUrl}
             />
           ))}
       </div>

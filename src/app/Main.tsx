@@ -4,7 +4,6 @@ import {
   getPriceFromLocalStorage,
   getProductsFromLocalStorage,
 } from "@/functions/LocalStorageFunctions";
-import useSetToken from "@/hooks/useSetToken";
 import { setCartFromLocalStorage } from "@/redux/features/product-slice";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";

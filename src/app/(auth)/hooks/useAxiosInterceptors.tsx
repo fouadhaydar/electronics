@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import useRefreshToken from "./useRefreshToken";
 import { useSelectore } from "@/redux/store";
 import { axiosAuth } from "../api/axiosAuth";
-import { AxiosError, AxiosRequestConfig, AxiosResponseHeaders } from "axios";
 
 const useAxiosInterceptors = () => {
   const refresh = useRefreshToken();
@@ -38,7 +37,6 @@ const useAxiosInterceptors = () => {
             prevRequest.url === "/product/postreview" ||
             prevRequest.url == "/product/getproductreview"
           ) {
-            console.log(response?.email);
             prevRequest.data = JSON.stringify({
               ...oldData,
               email: response?.email,

@@ -36,13 +36,13 @@ const ProductCategory = () => {
         <div>
           {data && (
             <HorizontalSlider>
-              {data.map((cat, i) => (
+              {data.map((cat) => (
                 <div className="icon_style_container" key={cat.id}>
                   <Link href={`/products/${cat.categoryName.toLowerCase()}`}>
                     <Image
-                      src={i == 0 ? phone : i == 1 ? ipad : laptop}
-                      width={150}
-                      height={150}
+                      src={cat.imgeUrl}
+                      width={100}
+                      height={100}
                       alt="image"
                     />
                   </Link>

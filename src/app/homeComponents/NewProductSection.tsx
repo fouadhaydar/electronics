@@ -46,6 +46,7 @@ const NewProductSection = ({
               description={ele.description}
               cardClass="card"
               review={ele.review}
+              imageUrl={ele.imageUrl}
             />
           ))}
         </HorizontalSlider>

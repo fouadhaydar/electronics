@@ -4,12 +4,9 @@ import React, { useEffect, useState } from "react";
 import { StarFill } from "react-bootstrap-icons";
 import RatingBar from "./RatingBar";
 import uuid from "react-uuid";
-import useSetToken from "@/hooks/useSetToken";
 import { useRouter } from "next/navigation";
-import useCustomeFetch from "@/hooks/useCustomeFetch";
 import useAxiosInterceptors from "@/app/(auth)/hooks/useAxiosInterceptors";
 import { useSelectore } from "@/redux/store";
-import axios from "axios";
 import { axiosAuth } from "@/app/(auth)/api/axiosAuth";
 
 const RatingSysteme = ({
@@ -49,8 +46,6 @@ const RatingSysteme = ({
       })();
     }
   }, [email, productId]);
-
-  console.log(rated);
 
   const handleRating = async (
     event: React.SyntheticEvent<Element, Event>,

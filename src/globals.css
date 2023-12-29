@@ -83,7 +83,7 @@ footer {
 /* md:w-[300px] xsm:w-[200px] */
 
 .card {
-  @apply md:h-[350px]  xsm:h-[300px] flex flex-col justify-center gap-2 p-3 relative  rounded-[5px] hover:scale-105 transition duration-100 ease-in-out cursor-pointer 
+  @apply max-w-[300px] md:h-[350px]  xsm:h-[300px] flex flex-col justify-center gap-2 p-3 relative  rounded-[5px] hover:scale-105 transition duration-100 ease-in-out cursor-pointer 
   drop_shadow;
 }
 .card_plus {

@@ -72,7 +72,7 @@ const Filter = () => {
             endAdornment: (
               <InputAdornment position="end">
                 <hr className="w-[1px] h-[30px] bg-slate-400" />
-                <IconButton onClick={() => console.log("search")}>
+                <IconButton>
                   <Search size={20} className="mx-1" />
                 </IconButton>
               </InputAdornment>
