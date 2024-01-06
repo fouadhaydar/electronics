@@ -90,7 +90,7 @@ const LogIn = () => {
   return (
     <>
       <Nav bgColor="bg-white" />
-      <section className="h-[100vh] container">
+      <section className="min-h-[100vh] container flex items-center">
         <div className="flex justify-center gap-5  items-center w-full h-full">
           <AuthScreenStyle />
           <div className="md:w-[70%] xsm:w-full">

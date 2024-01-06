@@ -75,7 +75,7 @@ const Cart = ({
               width:
                 innerWidth &&
                 (innerWidth < 400
-                  ? "250px"
+                  ? "300px"
                   : innerWidth > 400 && innerWidth < 500
                   ? "400px"
                   : "500px"),
