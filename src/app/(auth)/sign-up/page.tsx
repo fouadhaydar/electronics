@@ -43,9 +43,9 @@ const SignUp = () => {
   ) => {
     const controller = new AbortController();
     try {
-      await axiosAuth.post("/user/register", {
+      await axiosAuth("/user/register", {
         signal: controller.signal,
-        data: JSON.stringify(values),
+        data: values,
       });
       setValues({ ...initialValues });
       setTouched({
@@ -59,13 +59,22 @@ const SignUp = () => {
       router.back();
     } catch (error) {
       setValues({ ...initialValues });
-      setErrorMessage("Account already existe please try another one or ");
+      setErrorMessage(() => {
+        //@ts-ignore
+        const obj = error.response.data;
+        if (obj?.errors) {
+          //@ts-ignore
+          return obj.errors[0].description;
+        } else {
+          return obj.message;
+        }
+      });
     }
   };
   return (
     <>
       <Nav bgColor="bg-white" />
-      <section className="h-[100vh] xsm:pt-[70px] md:pt-0 lg:mx-[50px]">
+      <section className="min-h-[100vh] container flex items-center py-6">
         <div className="flex justify-center items-center w-full h-full gap-3">
           <AuthScreenStyle />
           <div className="md:w-[70%] xsm:w-full">

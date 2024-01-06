@@ -34,23 +34,21 @@ const CardInCart = ({
     // <Link href={`/products/${category.toLowerCase()}/${productId}`}>
     <div className="w-full">
       <div className="flex justify-between gap-6 w-full h-[150px] mb-4">
-        <div className=" w-1/4 my-auto">
+        <div className="md:flex xsm:hidden w-1/4 my-auto">
           <Image src={img} alt="phone" />
         </div>
-        <div className="flex flex-col  justify-around h-full w-3/4 px-2 gap-[4px]">
+        <div className="flex flex-col  justify-around h-full md:w-3/4 xsm:w-full px-2 gap-[4px]">
           <div className="flex justify-between items-center">
-            <div className="flex flex-col w-full">
+            <div className="flex flex-col w-full gap-2">
               <div className="flex justify-between w-full items-center">
-                <span className="text-xl">{name}</span>
+                <span className="md:text-xl xsm:text-[16px]">{name}</span>
                 <XCircle size={20} onClick={handleDelete} />
               </div>
               <span className="text-sm">{ramStorage}</span>
               <div
+                className="md:w-[50px] md:h-[50px] xsm:w-[30px] xsm:h-[30px] rounded-full border border-black"
                 style={{
                   backgroundColor: color,
-                  width: "50px",
-                  height: "50px",
-                  borderRadius: "9999px",
                 }}
               />
             </div>
