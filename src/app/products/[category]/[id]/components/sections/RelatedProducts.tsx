@@ -4,7 +4,6 @@ import HorizontalSlider from "@/components/HorizentalSlider";
 import useCustomeFetch from "@/hooks/useCustomeFetch";
 import { ProductCard } from "@/types";
 import React from "react";
-import { ArrowLeftCircle, ArrowRightCircle } from "react-bootstrap-icons";
 
 const RelatedProducts = ({ manufacturerId }: { manufacturerId: number }) => {
   const {
@@ -29,10 +28,7 @@ const RelatedProducts = ({ manufacturerId }: { manufacturerId: number }) => {
         <h3 className="section_title">Related Products</h3>
         {/* cart of new product */}
         {recomandationProducts && (
-          <HorizontalSlider
-            PrevElement={ArrowLeftCircle}
-            NextElement={ArrowRightCircle}
-          >
+          <HorizontalSlider>
             {recomandationProducts.map((product) => {
               return (
                 <Card
@@ -42,6 +38,7 @@ const RelatedProducts = ({ manufacturerId }: { manufacturerId: number }) => {
                   id={product.id}
                   key={product.id}
                   review={product.review}
+                  imageUrl={product.imageUrl}
                 />
               );
             })}

@@ -7,9 +7,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
-import ipad from "../../../public/assets/categories/ipadpro11-digitalmat-gallery-1-202210.png";
-import laptop from "../../../public/assets/categories/image-from-rawpixel-id-2763835-original.png";
-import phone from "../../../public/assets/phones/iphone14-digitalmat-gallery-3-202209.png";
 import Nav from "@/components/navBar/Nav";
 
 const Categories = () => {
@@ -48,12 +45,7 @@ const Categories = () => {
             key={cat.id}
           >
             <Link href={`/products/${cat.categoryName.toLowerCase()}`}>
-              <Image
-                src={i == 0 ? phone : i == 1 ? ipad : laptop}
-                width={150}
-                height={150}
-                alt="image"
-              />
+              <Image src={cat.imgeUrl} width={150} height={150} alt="image" />
             </Link>
             <span>{cat.categoryName}</span>
           </div>

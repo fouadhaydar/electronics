@@ -14,6 +14,10 @@ import { ArrowLeftCircle, ArrowRightCircle } from "react-bootstrap-icons";
 
 const HorizontalSlider = ({ children }: { children: ReactNode[] }) => {
   const swiperRef: MutableRefObject<SwiperType | undefined> = useRef();
+
+  const slidesPerViewMidScreen = Math.min(children.length, 2);
+  const slidesPerViewLargeScreen = Math.min(children.length, 3);
+
   return (
     <div className="flex justify-center items-center">
       <IconButton
@@ -39,10 +43,10 @@ const HorizontalSlider = ({ children }: { children: ReactNode[] }) => {
           },
 
           500: {
-            slidesPerView: 2,
+            slidesPerView: slidesPerViewMidScreen,
           },
           976: {
-            slidesPerView: 3,
+            slidesPerView: slidesPerViewLargeScreen,
           },
         }}
         style={{

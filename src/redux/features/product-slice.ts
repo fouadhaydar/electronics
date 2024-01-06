@@ -1,29 +1,11 @@
 "use client";
-import { setProductInLocalStoage } from "@/functions/LocalStorageFunctions";
 import { ProductInCart } from "@/types";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-
-// interface Product {
-//   name: string;
-//   id: string;
-//   price: number;
-//   quantity: number;
-//   options: {
-//     [key: string]: any;
-//   };
-// }
 
 interface InitialState {
   cart: ProductInCart[];
   totalePrice: number;
 }
-// const getProductsFromLocalStorage = (): ProductInCart[] | null => {
-//   if (localStorage) {
-//     const data = localStorage.getItem("products");
-//     return data ? JSON.parse(data) : null;
-//   }
-//   return null;
-// };
 
 const initialState: InitialState = {
   cart: [],
@@ -35,7 +17,6 @@ const CartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action: PayloadAction<ProductInCart>) => {
-      // const id = action.payload.variationId;
       state.cart.push(action.payload);
       state.totalePrice += action.payload.price;
     },
@@ -43,7 +24,6 @@ const CartSlice = createSlice({
       state,
       action: PayloadAction<{ data: ProductInCart[]; price: number }>
     ) => {
-      // console.log("inside redux");
       state.cart = [...action.payload.data];
       state.totalePrice = action.payload.price;
     },
